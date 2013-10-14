@@ -29,17 +29,24 @@ print "var daap = \"$url/\";\n";
 $list = $daap->getSonglist( $host );
 print( 'var item = ' . json_encode($list) . ";\n" );
 ?>
+setup();
 
-var songsList = document.getElementById('songs');
-songsList.length = item.length;
-for ( var i = 0; i < item.length; i++ )
+function setup()
 {
-	songsList.options[ i ].value = item[ i ].miid + "." + item[ i ].asfm;
-	songsList.options[ i ].text  =
-		( item[ i ].asar ).substr( 0, 20 ) + " : " +
-		( item[ i ].asal ).substr( 0, 20 ) + " : " +
-		item[ i ].astn + " : " +
-		( item[ i ].minm ).substr( 0, 20 );
+	var player = document.getElementById('audio_player');
+	player.addEventListener("ended", playend, false);
+
+	var songsList = document.getElementById('songs');
+	songsList.length = item.length;
+	for ( var i = 0; i < item.length; i++ )
+	{
+		songsList.options[ i ].value = item[ i ].miid + "." + item[ i ].asfm;
+		songsList.options[ i ].text  =
+			( item[ i ].asar ).substr( 0, 20 ) + " : " +
+			( item[ i ].asal ).substr( 0, 20 ) + " : " +
+			item[ i ].astn + " : " +
+			( item[ i ].minm ).substr( 0, 20 );
+	}
 }
 
 function play()
@@ -51,6 +58,21 @@ function play()
 	player.src = url;
 	player.play();
 }
+
+function playend()
+{
+	var songsList = document.getElementById('songs');
+	if ( songsList.selectedIndex < songsList.length )
+	{
+		songsList.selectedIndex++;
+	}
+	else
+	{
+		songsList.selectedIndex = 0;
+	}
+	play();
+}
+
 </script>
 
 </body>
