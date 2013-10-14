@@ -29,6 +29,9 @@ print "var daap = \"$url/\";\n";
 $list = $daap->getSonglist( $host );
 print( 'var item = ' . json_encode($list) . ";\n" );
 ?>
+
+var lastid = -1;
+
 setup();
 
 function setup()
@@ -51,10 +54,19 @@ function setup()
 
 function play()
 {
-	var songsList = document.getElementById('songs');
-	var id = songsList.options[ songsList.selectedIndex ].value;
-	var url = daap + id;
 	var player = document.getElementById('audio_player');
+	var songsList = document.getElementById('songs');
+	if ( ! player.ended )
+	{
+		if ( lastid == songsList.selectedIndex )
+		{
+			return;
+		}
+	}
+	lastid = songsList.selectedIndex;
+
+	var id = songsList.options[ lastid ].value;
+	var url = daap + id;
 	player.src = url;
 	player.play();
 }
