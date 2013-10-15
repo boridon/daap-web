@@ -2,20 +2,29 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width" />
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"/>
+<script>
+$(function() {
+$( "#slider" ).slider({min:0, max:100, step:1, value:100, range:"min", change:changeVolume,});
+});
+</script>
 <title>daap-play sample</title>
 </head>
 <body>
 
 <div id="playlist">
 <select id="songs" size=12 onChange="play();">
-	<option value="0">dummy</option>
+<option value="0">dummy</option>
 </select>
 </div>
 
-<div id="player">
-<audio controls id="audio_player">
-</audio>
+<div id="playerbox" style="margin: 4px">
+<div id="player" style="float: left; margin: 4px;"><audio controls id="audio_player"></audio></div>
+<div id="slider" style="float: left; width: 200px; margin: 8px;"></div>
 </div>
+
 
 <script type="text/javascript">
 <?php
@@ -83,6 +92,12 @@ function playend()
 		songsList.selectedIndex = 0;
 	}
 	play();
+}
+
+function changeVolume(event, ui)
+{
+	var player = document.getElementById('audio_player');
+	player.volume = ui.value / 100.0;
 }
 
 </script>
