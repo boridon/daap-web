@@ -16,7 +16,7 @@ $( "#slider" ).slider({min:0, max:100, step:1, value:100, range:"min", change:ch
 
 <div id="playlist">
 <select id="songs" size=12 onChange="play();">
-<option value="0">dummy</option>
+<option value="0">initialize failed</option>
 </select>
 </div>
 
@@ -28,8 +28,10 @@ $( "#slider" ).slider({min:0, max:100, step:1, value:100, range:"min", change:ch
 
 <script type="text/javascript">
 <?php
+require_once('config.php');
 require_once('daap.php');
-$host = 'http://' . $_SERVER['SERVER_NAME'] . ':3689';
+
+$host = 'http://' . $server . ':' . $port;
 $daap = new Daap();
 
 $url = $daap->getSongUrl( $host );
@@ -40,7 +42,6 @@ print( 'var item = ' . json_encode($list) . ";\n" );
 ?>
 
 var lastid = -1;
-
 setup();
 
 function setup()
