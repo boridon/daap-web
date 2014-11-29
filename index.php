@@ -90,19 +90,20 @@ function makeAlbumList( artist )
 {
 	var selectList = document.getElementById('albums');
 	var keyList;
+	var listIndex = 0;
 	if ( artist )
 	{
 		keyList = getFilterdKeys('asal', 'asar', artist );
+		selectList.length = keyList.length;
 	}
 	else
 	{
 		keyList = getKeys('asal');
+		selectList.length = keyList.length + 1;
+		selectList.options[ listIndex ].value = "";
+		selectList.options[ listIndex ].text  = "all";
+		listIndex++;
 	}
-	var listIndex = 0;
-	selectList.length = keyList.length + 1;
-	selectList.options[ listIndex ].value = "";
-	selectList.options[ listIndex ].text  = "all";
-	listIndex++;
 	for ( var i = 0; i < keyList.length; i++ )
 	{
 		var name = keyList[i];
