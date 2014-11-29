@@ -63,7 +63,7 @@ function setup()
 	player.addEventListener("ended", playend, false);
 
 	makeArtistList();
-	makeAlbumList('all');
+	makeAlbumList();
 	makePlayList();
 }
 
@@ -164,7 +164,6 @@ function changeAlbum()
 
 function makePlayList()
 {
-//	var artistRegExp = new RegExp( getFilter( 'artists' ) );
 	var albumRegExp  = new RegExp( getFilter( 'albums' ) );
 
 	var songsList = document.getElementById('songs');
@@ -178,24 +177,55 @@ function makePlayList()
 	lastSong = -1;
 	for ( var i = 0; i < item.length; i++ )
 	{
-//		var ar = artistRegExp.test( item[ i ].asar );
 		var al = albumRegExp.test( item[ i ].asal );
-//		if ( ar && al )
 		if ( al )
 		{
 			var currentListIndex = songsList.length;
 			var songIndex = item[ i ].miid + "." + item[ i ].asfm;
-			var songName  = item[ i ].astn + " : " + item[ i ].minm;
+			var songName  = ( "0" + item[ i ].astn ).slice(-2) + " : " + item[ i ].minm;
 
 			songsList.options[ currentListIndex ] = new Option( songName, songIndex );
-
-			if ( selectedSongId == songIndex )
-			{
-				songsList.selectedIndex = currentListIndex;
-				lastSong = currentListIndex;
-			}
 		}
 	}
+
+	var albumList = document.getElementById( 'albums' );
+	var album = albumList.options[ albumList.selectedIndex ].value;
+	if ( album )
+	{
+		sortSelect( songsList );
+	}
+
+	for ( var i = 0; i < songsList.length; i++ )
+	{
+		if ( selectedSongId == songsList.options[i].value )
+		{
+			songsList.selectedIndex = i;
+			lastSong = i;
+		}
+	}
+
+}
+
+function sortSelect(selElem)
+{
+	var tmpAry = new Array();
+	for (var i=0;i<selElem.options.length;i++)
+	{
+		tmpAry[i] = new Array();
+		tmpAry[i][0] = selElem.options[i].text;
+		tmpAry[i][1] = selElem.options[i].value;
+	}
+	tmpAry.sort();
+	while (selElem.options.length > 0)
+	{
+		selElem.options[0] = null;
+	}
+	for (var i=0;i<tmpAry.length;i++)
+	{
+		var op = new Option(tmpAry[i][0], tmpAry[i][1]);
+		selElem.options[i] = op;
+	}
+	return;
 }
 
 function getFilter( elementId )

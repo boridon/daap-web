@@ -92,7 +92,7 @@ class Daap
 			$asar, SORT_ASC, SORT_STRING,
 			$asal, SORT_ASC, SORT_STRING,
 			$astn, SORT_ASC, SORT_NUMERIC,
-			$minm, SORT_ASC, SORT_STRING,
+//			$minm, SORT_ASC, SORT_STRING,
 			$list );
 
 		return $list;
