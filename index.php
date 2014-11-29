@@ -62,15 +62,42 @@ function setup()
 	var player = document.getElementById('audio_player');
 	player.addEventListener("ended", playend, false);
 
-	makeList( 'artists', 'asar');
-	makeList( 'albums',  'asal');
+	makeArtistList();
+	makeAlbumList('all');
 	makePlayList();
 }
 
-function makeList( elementId, itemKey )
+function makeArtistList()
 {
-	var selectList = document.getElementById(elementId);
-	var keyList = getKeys(itemKey);
+	var selectList = document.getElementById('artists');
+	var keyList = getKeys('asar');
+	var listIndex = 0;
+	selectList.length = keyList.length + 1;
+	selectList.options[ listIndex ].value = "";
+	selectList.options[ listIndex ].text  = "all";
+	listIndex++;
+	for ( var i = 0; i < keyList.length; i++ )
+	{
+		var name = keyList[i];
+		selectList.options[ listIndex ].value = name;
+		selectList.options[ listIndex ].text  = name;
+		listIndex++;
+	}
+	selectList.selectedIndex = 0;
+}
+
+function makeAlbumList( artist )
+{
+	var selectList = document.getElementById('albums');
+	var keyList;
+	if ( artist )
+	{
+		keyList = getFilterdKeys('asal', 'asar', artist );
+	}
+	else
+	{
+		keyList = getKeys('asal');
+	}
 	var listIndex = 0;
 	selectList.length = keyList.length + 1;
 	selectList.options[ listIndex ].value = "";
@@ -102,8 +129,31 @@ function getKeys( keyName )
 	return unique;
 }
 
+function getFilterdKeys( keyName, keyFilter, valueFilter )
+{
+	var check = {};
+	var unique = [];
+	for ( var i = 0; i < item.length; i++ )
+	{
+		if ( item[i][keyFilter] == valueFilter )
+		{
+			var value = item[i][keyName];
+			if ( ! ( value in check ) )
+			{
+				check[value] = 1;
+				unique.push(value);
+			}
+		}
+	}
+	return unique;
+}
+
 function changeArtist()
 {
+	var selectList = document.getElementById( 'artists' );
+	var artist = selectList.options[ selectList.selectedIndex ].value;
+
+	makeAlbumList( artist );
 	makePlayList();
 }
 
@@ -114,7 +164,7 @@ function changeAlbum()
 
 function makePlayList()
 {
-	var artistRegExp = new RegExp( getFilter( 'artists' ) );
+//	var artistRegExp = new RegExp( getFilter( 'artists' ) );
 	var albumRegExp  = new RegExp( getFilter( 'albums' ) );
 
 	var songsList = document.getElementById('songs');
@@ -128,9 +178,10 @@ function makePlayList()
 	lastSong = -1;
 	for ( var i = 0; i < item.length; i++ )
 	{
-		var ar = artistRegExp.test( item[ i ].asar );
+//		var ar = artistRegExp.test( item[ i ].asar );
 		var al = albumRegExp.test( item[ i ].asal );
-		if ( ar && al )
+//		if ( ar && al )
+		if ( al )
 		{
 			var currentListIndex = songsList.length;
 			var songIndex = item[ i ].miid + "." + item[ i ].asfm;
