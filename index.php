@@ -6,6 +6,11 @@
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"/>
 
+<style type="text/css">
+select.listbox {
+font-size: 12pt;
+</style>
+
 <script>
 $(function() {
 $( "#slider" ).slider({min:0, max:100, step:1, value:100, range:"min", change:changeVolume,});
@@ -17,15 +22,15 @@ $( "#slider" ).slider({min:0, max:100, step:1, value:100, range:"min", change:ch
 <body>
 
 <div id="filterlist">
-<select id="artists" size=12 style="width: 45%" onChange="changeArtist();">
+<select class="listbox" id="artists" size=12 style="width: 45%" onChange="changeArtist();">
 <option value="0">initialize failed</option>
 </select>
-<select id="albums" size=12 style="width: 45%" onChange="changeAlbum();">
+<select class="listbox" id="albums" size=12 style="width: 45%" onChange="changeAlbum();">
 <option value="0">initialize failed</option>
 </select>
 
 <div id="playlist">
-<select id="songs" size=12 style="width: 90%" onChange="play();">
+<select class="listbox" id="songs" size=12 style="width: 90%" onChange="play();">
 <option value="0">initialize failed</option>
 </select>
 </div>
@@ -104,6 +109,7 @@ function makeAlbumList( artist )
 		selectList.options[ listIndex ].text  = "all";
 		listIndex++;
 	}
+
 	for ( var i = 0; i < keyList.length; i++ )
 	{
 		var name = keyList[i];
